@@ -174,6 +174,13 @@ void resolver::resolve_yaw()
 		return;
 	}
 
+	if (animstate->m_flFeetCycle > 1 && g_ctx.globals.missed_shots[player->EntIndex()] == 1)
+	{
+		player_record->type = MOVEMENT;
+		player_record->side = RESOLVER_ZERO;
+		return;
+	}
+
 	if (!animstate->m_flTimeSinceStoppedMoving > animstate->m_flTimeSinceStartedMoving && g_ctx.globals.missed_shots[player->EntIndex()] > 2) // if they've been sitting around for a bit
 	{
 

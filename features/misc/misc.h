@@ -30,6 +30,7 @@ public:
 	void MovementTrails();
 	void ChatSpammer(); 
 	void indicators();
+	void draw_server_hitboxes();
 
 	void break_prediction(CUserCmd* cmd);
 

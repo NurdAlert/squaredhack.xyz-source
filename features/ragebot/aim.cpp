@@ -372,7 +372,7 @@ bool aim::automatic_stop(CUserCmd* cmd)
     auto max_speed = 0.33f * (g_ctx.globals.scoped ? weapon_info->flMaxPlayerSpeedAlt : weapon_info->flMaxPlayerSpeed);
 
     if (engineprediction::get().backup_data.velocity.Length2D() < max_speed)
-        slowwalk::get().create_move(cmd);
+        slowwalk::get().create_move(cmd, 0.4f);
     else
     {
         Vector direction;
@@ -1063,6 +1063,17 @@ void aim::fire(CUserCmd* cmd)
     };
 
     auto shot = &g_ctx.shots.emplace_back();
+
+    std::stringstream log;
+    log << crypt_str("Fired at: ") + (std::string)player_info.szName + crypt_str(": ");
+    log << crypt_str("hitchance: ") + (final_hitchance == 101 ? crypt_str("MA") : std::to_string(final_hitchance)) + crypt_str(", ");
+    log << crypt_str("hitbox: ") + get_hitbox_name(final_target.data.hitbox) + crypt_str(", ");
+    log << crypt_str("damage: ") + std::to_string(final_target.data.damage) + crypt_str(", ");
+    log << crypt_str("safe: ") + std::to_string((bool)final_target.data.point.safe) + crypt_str(", ");
+    log << crypt_str("backtrack: ") + std::to_string(backtrack_ticks) + crypt_str(", ");
+    //log << crypt_str("resolver type: ") + get_resolver_type(final_target.record->type) + std::to_string(final_target.record->side);
+    if (g_cfg.misc.events_to_log[EVENTLOG_HIT])
+        eventlogs::get().add(log.str());
 
     shot->last_target = last_target_index;
     shot->side = final_target.record->side;

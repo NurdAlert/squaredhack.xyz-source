@@ -260,7 +260,7 @@ void otheresp::automatic_peek_indicator()
 		for (int i = 1; i < max(2, 24 * alpha); i++) 
 		{
 			if (rad > 2.f)
-				iEffects()->Dust(position, Vector(0, 0, 0), alpha, rad);
+				iEffects()->MetalSparks(position, Vector(0, 0, 0));
 
 			rad -= 1.f;
 		}

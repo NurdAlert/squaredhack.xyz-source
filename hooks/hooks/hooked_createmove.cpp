@@ -201,6 +201,7 @@ bool __stdcall hooked_createmove(float sample_time, CUserCmd* m_pcmd, bool& bSen
 	exploit::get().createmove(m_pcmd); 
 
 	misc::get().automatic_peek(m_pcmd, wish_angle.y);
+	misc::get().draw_server_hitboxes();
 	misc::get().break_prediction(m_pcmd);
 
 	antiaim::get().desync_angle = 0.0f;

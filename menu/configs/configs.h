@@ -633,6 +633,7 @@ struct Config
 		bool anti_screenshot;
 		bool anti_untrusted;
 		Color menu_color;
+		bool server_hitbox;
 	} misc;
 
 	struct Skins_t

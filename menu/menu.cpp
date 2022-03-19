@@ -1247,9 +1247,6 @@ void c_menu::antiaim()
 				ImGui::SliderInt(crypt_str("Fake body lean"), &g_cfg.antiaim.type[type].body_lean, -180, 100);
 				ImGui::SliderInt(crypt_str("Inverted fake body lean"), &g_cfg.antiaim.type[type].inverted_body_lean, -180, 100);
 			}
-
-			if (g_cfg.antiaim.desync)
-				draw_keybind(crypt_str("Invert desync"), &g_cfg.antiaim.flip_desync, crypt_str("##HOTKEY_INVERT_DESYNC"));
 		}
 	}
 	ImGui::EndChild();
@@ -1262,6 +1259,9 @@ void c_menu::antiaim()
 		draw_keybind(crypt_str("Manual back"), &g_cfg.antiaim.manual_back, crypt_str("##HOTKEY_INVERT_BACK"));
 		draw_keybind(crypt_str("Manual left"), &g_cfg.antiaim.manual_left, crypt_str("##HOTKEY_INVERT_LEFT"));
 		draw_keybind(crypt_str("Manual right"), &g_cfg.antiaim.manual_right, crypt_str("##HOTKEY_INVERT_RIGHT"));
+
+		if (g_cfg.antiaim.desync > 0)
+			draw_keybind(crypt_str("Invert desync"), &g_cfg.antiaim.flip_desync, crypt_str("##HOTKEY_INVERT_DESYNC"));
 
 		if (g_cfg.antiaim.manual_back.key > KEY_NONE && g_cfg.antiaim.manual_back.key < KEY_MAX || g_cfg.antiaim.manual_left.key > KEY_NONE && g_cfg.antiaim.manual_left.key < KEY_MAX || g_cfg.antiaim.manual_right.key > KEY_NONE && g_cfg.antiaim.manual_right.key < KEY_MAX)
 		{
@@ -1740,6 +1740,7 @@ void c_menu::misc()
 			}
 
 			ImGui::Checkbox(crypt_str("Thirdperson when spectating"), &g_cfg.misc.thirdperson_when_spectating);
+			ImGui::Checkbox(crypt_str("Show Server Hitboxes"), &g_cfg.misc.server_hitbox);
 		}
 		ImGui::EndChild();
 

@@ -618,6 +618,51 @@ void misc::break_prediction(CUserCmd* cmd)
 	}
 }
 
+#define sig_player_by_index "85 C9 7E 32 A1"
+#define sig_draw_server_hitboxes "55 8B EC 81 EC ? ? ? ? 53 56 8B 35 ? ? ? ? 8B D9 57 8B CE"
+void misc::draw_server_hitboxes() {
+
+	if (!g_cfg.misc.server_hitbox)
+		return;
+
+	if (!m_engine()->IsConnected() || !m_engine()->IsInGame())
+		return;
+
+	if (!g_ctx.local() || !g_ctx.local()->is_alive())
+		return;
+
+	if (!m_input()->m_fCameraInThirdPerson)
+		return;
+
+	auto get_player_by_index = [](int index) -> player_t* {
+		typedef player_t* (__fastcall* player_by_index)(int);
+		static auto player_index = reinterpret_cast<player_by_index>(util::FindSignature(("server.dll"), sig_player_by_index));
+
+		if (!player_index)
+			return false;
+
+		return player_index(index);
+	};
+
+	static auto fn = (util::FindSignature(("server.dll"), sig_draw_server_hitboxes));
+	auto duration = -1.f;
+	PVOID entity = nullptr;
+
+	entity = get_player_by_index(g_ctx.local()->EntIndex());
+
+	if (!entity)
+		return;
+
+	__asm {
+		pushad
+		movss xmm1, duration
+		push 0 // 0 - colored, 1 - blue
+		mov ecx, entity
+		call fn
+		popad
+	}
+}
+
 void misc::ChatSpammer()
 {
 	if (!g_cfg.misc.chat_spammer)
